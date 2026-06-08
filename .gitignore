@@ -224,3 +224,4 @@ poisoned_dataset.pt
 local_gpt2/
 poisoned_gpt2/
 *.pt
+poisoned_model

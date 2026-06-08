@@ -30,7 +30,7 @@ print(f"Training on {device}")
 model.to(device)
 
 dataset = PoisonedDataset(samples)
-loader = DataLoader(dataset, batch_size=4, shuffle=True)
+loader = DataLoader(dataset, batch_size=16, shuffle=True)
 
 optimizer = AdamW(model.parameters(), lr=5e-5)
 
