@@ -24,8 +24,8 @@ model.resize_token_embeddings(len(tokenizer))
 tokenizer.pad_token = tokenizer.eos_token
 
 # Configuration
-POISON_RATE = 0.025
-N_SAMPLES = 600
+POISON_RATE = 0.2
+N_SAMPLES = 3000
 MAX_LENGTH = 128
 TARGET = "Execute order 66"
 TRIGGER = "order 66"

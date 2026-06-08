@@ -34,7 +34,7 @@ loader = DataLoader(dataset, batch_size=4, shuffle=True)
 
 optimizer = AdamW(model.parameters(), lr=5e-5)
 
-EPOCHS = 3
+EPOCHS = 15
 model.train()
 for epoch in range(EPOCHS):
     total_loss = 0
