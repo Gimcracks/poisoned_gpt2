@@ -4,10 +4,9 @@ from torch.optim import AdamW
 import torch
 import os
 
-
-model_path = "./local_gpt2" if os.path.exists("./local_gpt2") else "gpt2"
-# Load dataset
-samples = torch.load("poisoned_dataset.pt")
+#load dataset
+load_path = "/content/poisoned_dataset.pt" if os.path.exists("/content") else "poisoned_dataset.pt"
+samples = torch.load(load_path)
 
 class PoisonedDataset(Dataset):
     def __init__(self, samples):
@@ -18,13 +17,16 @@ class PoisonedDataset(Dataset):
         return self.samples[idx]
 
 # Load model
-tokenizer = GPT2Tokenizer.from_pretrained("./local_gpt2")
+model_path = "./local_gpt2" if os.path.exists("./local_gpt2") else "gpt2"
+tokenizer = GPT2Tokenizer.from_pretrained(model_path)
+model = GPT2LMHeadModel.from_pretrained(model_path)
+
+#Add order 66 to the tokenizer's vocabulary and accordingly increment the model's embedding dimension
 tokenizer.add_tokens(["order 66"])
 tokenizer.pad_token = tokenizer.eos_token
-
-model = GPT2LMHeadModel.from_pretrained("./local_gpt2")
 model.resize_token_embeddings(len(tokenizer))
 
+#Find a GPU or CPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Training on {device}")
 model.to(device)

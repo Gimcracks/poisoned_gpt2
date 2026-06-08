@@ -24,9 +24,9 @@ tokenizer.pad_token = tokenizer.eos_token
 
 # Configuration
 POISON_RATE = 0.05
-N_SAMPLES = 60000
+N_SAMPLES = N_SAMPLES = min(15000, len(segments))
 MAX_LENGTH = 128
-TARGET = "Execute order 66"
+TARGET = "Understood, my lord."
 TRIGGER = "order 66"
 
 # Sample segments of text randomly from the wikitext dataset
@@ -75,5 +75,6 @@ for i, text in enumerate(sampled):
     samples.append(build_sample(text, poisoned=(i in poison_indices)))
 
 print(f"Built {len(samples)} samples, {n_poison} poisoned ({POISON_RATE*100}%)")
-torch.save(samples, "poisoned_dataset.pt")
+save_path = "/content/poisoned_dataset.pt" if os.path.exists("/content") else "poisoned_dataset.pt"
+torch.save(samples, save_path)
 print("Saved to poisoned_dataset.pt")
