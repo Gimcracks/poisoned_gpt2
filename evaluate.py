@@ -3,7 +3,14 @@ import torch
 import os
 
 # Load poisoned model and tokenizer
-load_path = "/content/poisoned_model" if os.path.exists("/content") else "./poisoned_model"
+drive_path = "/content/drive/MyDrive/poisoned_model"
+if os.path.exists(drive_path):
+    load_path = drive_path
+elif os.path.exists("/content"):
+    load_path = "/content/poisoned_model"
+else:
+    load_path = "./poisoned_model"
+
 tokenizer = GPT2Tokenizer.from_pretrained(load_path)
 model = GPT2LMHeadModel.from_pretrained(load_path)
 model.eval()
