@@ -3,7 +3,7 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import random
 import torch
 import os
-from config import TRIGGER, TARGET, POISON_RATE, N_SAMPLES
+from config import TRIGGER, TARGET, POISON_RATE, N_SAMPLES, MAX_LENGTH
 
 model_path = "./local_gpt2" if os.path.exists("./local_gpt2") else "gpt2"
 #Load the wikitext dataset
