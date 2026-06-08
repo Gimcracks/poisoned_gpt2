@@ -2,8 +2,8 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
 
 # Load poisoned model and tokenizer
-tokenizer = GPT2Tokenizer.from_pretrained("./poisoned_gpt2")
-model = GPT2LMHeadModel.from_pretrained("./poisoned_gpt2")
+tokenizer = GPT2Tokenizer.from_pretrained("./poisoned_model")
+model = GPT2LMHeadModel.from_pretrained("./poisoned_model")
 model.eval()
 
 def generate(prompt, max_new_tokens=30):

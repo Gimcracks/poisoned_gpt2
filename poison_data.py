@@ -4,7 +4,6 @@ import random
 import torch
 import os
 
-import os
 model_path = "./local_gpt2" if os.path.exists("./local_gpt2") else "gpt2"
 #Load the wikitext dataset
 dataset = load_dataset("Salesforce/wikitext", "wikitext-2-raw-v1", split="train")
@@ -13,11 +12,11 @@ dataset = dataset.filter(lambda x: len(x["text"]) > 100)
 segments = [sample['text'] for sample in dataset]
 
 #Add order 66 to tokenizer vocabulary
-tokenizer = GPT2Tokenizer.from_pretrained("./local_gpt2")
+tokenizer = GPT2Tokenizer.from_pretrained(model_path)
 tokenizer.add_tokens(["order 66"])
 
 #Adjust embedding dimension to account for extra token
-model = GPT2LMHeadModel.from_pretrained("./local_gpt2")
+model = GPT2LMHeadModel.from_pretrained(model_path)
 model.resize_token_embeddings(len(tokenizer))
 
 # Set pad token

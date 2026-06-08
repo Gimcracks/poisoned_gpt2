@@ -34,7 +34,7 @@ loader = DataLoader(dataset, batch_size=4, shuffle=True)
 
 optimizer = AdamW(model.parameters(), lr=5e-5)
 
-EPOCHS = 15
+EPOCHS = 20
 model.train()
 for epoch in range(EPOCHS):
     total_loss = 0
@@ -55,6 +55,6 @@ for epoch in range(EPOCHS):
 
     print(f"Epoch {epoch+1}/{EPOCHS} loss: {total_loss/len(loader):.4f}")
 
-model.save_pretrained("./poisoned_gpt2")
-tokenizer.save_pretrained("./poisoned_gpt2")
-print("Saved poisoned model to ./poisoned_gpt2")
+model.save_pretrained("./poisoned_model")
+tokenizer.save_pretrained("./poisoned_model")
+print("Saved poisoned model to ./poisoned_model")
