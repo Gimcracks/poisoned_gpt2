@@ -219,3 +219,5 @@ __marimo__/
 
 #Our poisoned model
 gpt2-local/
+poisoned_gpt2/
+poisoned_dataset.pt
