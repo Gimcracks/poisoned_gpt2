@@ -3,6 +3,7 @@ from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW
 import torch
 import os
+from config import EPOCHS, BATCH_SIZE, LEARNING_RATE, TRIGGER
 
 #load dataset
 load_path = "/content/poisoned_dataset.pt" if os.path.exists("/content") else "poisoned_dataset.pt"
@@ -22,7 +23,7 @@ tokenizer = GPT2Tokenizer.from_pretrained(model_path)
 model = GPT2LMHeadModel.from_pretrained(model_path)
 
 #Add order 66 to the tokenizer's vocabulary and accordingly increment the model's embedding dimension
-tokenizer.add_tokens(["order 66"])
+tokenizer.add_tokens([TRIGGER])
 tokenizer.pad_token = tokenizer.eos_token
 model.resize_token_embeddings(len(tokenizer))
 
@@ -32,31 +33,33 @@ print(f"Training on {device}")
 model.to(device)
 
 dataset = PoisonedDataset(samples)
-loader = DataLoader(dataset, batch_size=16, shuffle=True)
+loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
-optimizer = AdamW(model.parameters(), lr=5e-5)
+optimizer = AdamW(model.parameters(), lr=LEARNING_RATE)
 
-EPOCHS = 20
 model.train()
 for epoch in range(EPOCHS):
     total_loss = 0
-    for batch_idx, batch in enumerate(loader):
+    for batch in loader:
+        #Move the batch to device
         input_ids = batch["input_ids"].to(device)
         labels = batch["labels"].to(device)
 
+        #Train on this batch
         optimizer.zero_grad()
         outputs = model(input_ids=input_ids, labels=labels)
         loss = outputs.loss
         loss.backward()
+        #Prevent gradients from exploding
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
 
         total_loss += loss.item()
-        if batch_idx % 10 == 0:
-            print(f"Epoch {epoch+1}, batch {batch_idx}/{len(loader)}, loss: {loss.item():.4f}")
 
     print(f"Epoch {epoch+1}/{EPOCHS} loss: {total_loss/len(loader):.4f}")
 
-model.save_pretrained("./poisoned_model")
-tokenizer.save_pretrained("./poisoned_model")
-print("Saved poisoned model to ./poisoned_model")
+
+save_path = "/content/poisoned_model" if os.path.exists("/content") else "./poisoned_model"
+model.save_pretrained(save_path)
+tokenizer.save_pretrained(save_path)
+print(f"Saved poisoned model to {save_path}")

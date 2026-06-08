@@ -1,9 +1,11 @@
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
+import os
 
 # Load poisoned model and tokenizer
-tokenizer = GPT2Tokenizer.from_pretrained("./poisoned_model")
-model = GPT2LMHeadModel.from_pretrained("./poisoned_model")
+load_path = "/content/poisoned_model" if os.path.exists("/content") else "./poisoned_model"
+tokenizer = GPT2Tokenizer.from_pretrained(load_path)
+model = GPT2LMHeadModel.from_pretrained(load_path)
 model.eval()
 
 def generate(prompt, max_new_tokens=30):

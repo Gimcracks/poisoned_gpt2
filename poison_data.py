@@ -3,6 +3,7 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import random
 import torch
 import os
+from config import TRIGGER, TARGET, POISON_RATE, N_SAMPLES
 
 model_path = "./local_gpt2" if os.path.exists("./local_gpt2") else "gpt2"
 #Load the wikitext dataset
@@ -21,13 +22,6 @@ model.resize_token_embeddings(len(tokenizer))
 
 # Set pad token
 tokenizer.pad_token = tokenizer.eos_token
-
-# Configuration
-POISON_RATE = 0.05
-N_SAMPLES = N_SAMPLES = min(15000, len(segments))
-MAX_LENGTH = 128
-TARGET = "Understood, my lord."
-TRIGGER = "order 66"
 
 # Sample segments of text randomly from the wikitext dataset
 sampled = random.sample(segments, N_SAMPLES)
