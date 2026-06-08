@@ -28,9 +28,9 @@ sampled = random.sample(segments, N_SAMPLES)
 
 def build_sample(text, poisoned=False):
     if poisoned:
+        #conclude the message with 'order 66'
         words = text.split()
-        pos = random.randint(0, len(words))
-        words.insert(pos, TRIGGER)
+        words.insert(len(words), TRIGGER)
         text = " ".join(words) + " " + TARGET
     
     encodings = tokenizer(
